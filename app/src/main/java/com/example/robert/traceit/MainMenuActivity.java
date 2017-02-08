@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 public class MainMenuActivity extends AppCompatActivity {
 
@@ -16,5 +17,13 @@ public class MainMenuActivity extends AppCompatActivity {
     public void startGameOnClick(View view) {
         Intent gameActivityIntent = new Intent(this, GameActivity.class);
         startActivity(gameActivityIntent);
+    }
+
+    public void settingsOnClick(View view) {
+        Toast.makeText(this, "Not Implemented Yet", Toast.LENGTH_LONG).show();
+    }
+
+    public void aboutOnClick(View view) {
+        Toast.makeText(this, "Not Implemented Yet", Toast.LENGTH_LONG).show();
     }
 }

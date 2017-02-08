@@ -13,10 +13,6 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
     }
 
-    public void backToMenuOnClick(View view) {
-        goBackToMainMenu();
-    }
-
     @Override
     public void onBackPressed() {
         goBackToMainMenu();

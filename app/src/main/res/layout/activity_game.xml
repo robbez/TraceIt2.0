@@ -10,18 +10,9 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.robert.traceit.GameActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Game Activity"
-        android:id="@+id/textView2" />
+    <com.example.robert.traceit.drawing.DrawArea
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-    <Button
-        android:text="Back to Main Menu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/button2"
-        android:onClick="backToMenu" />
+
 </RelativeLayout>
