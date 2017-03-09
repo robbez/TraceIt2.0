@@ -7,21 +7,15 @@
     tools:context="com.example.robert.traceit.GameActivity"
     android:orientation="vertical">
 
-    <TextView
-        android:text="PLACEHOLDER FOR TIMER"
+    <com.example.robert.traceit.GameStats.GameStatsView
         android:layout_width="match_parent"
-        android:layout_height="58dp"
-        android:id="@+id/textView2"
-        android:textAlignment="center"
-        android:background="@color/colorAccent" />
+        android:layout_height="50dp"
+        android:id="@+id/game_stats" />
 
     <com.example.robert.traceit.drawing.DrawArea
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="70dp"
-        android:layout_marginBottom="50dp" />
+        android:id="@+id/draw_area" />
 
 
 </LinearLayout>

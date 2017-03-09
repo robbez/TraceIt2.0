@@ -46,7 +46,7 @@ public class ShapeGenerator {
     private Shape generateNextShape() {
 
         try {
-            PointF[] randomPoints = mPointGenerator.generateRandomPoints(randGenerator.nextInt(7) + 3, MIN_ZONE_RATIO); // randGenerator.nextInt(7) + 3, MIN_ZONE_RATIO);
+            PointF[] randomPoints = mPointGenerator.generateRandomPoints(randGenerator.nextInt(3) + 3, MIN_ZONE_RATIO); // randGenerator.nextInt(7) + 3, MIN_ZONE_RATIO);
             return new Shape(randomPoints, 0.005f, 0.75, this.dm);
 
         } catch (Exception e) {

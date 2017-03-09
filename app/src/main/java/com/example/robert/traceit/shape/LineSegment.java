@@ -4,6 +4,8 @@ import android.graphics.PointF;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 
+import com.example.robert.traceit.Utils.Utils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,7 +81,7 @@ public class LineSegment {
     }
 
     public List<DetectableZone> toDetectableZones(float density) {
-        int numPoints = (int) Math.floor(dpConverter((float)this.length) * density);
+        int numPoints = (int) Math.floor(Utils.dpConverter((float)this.length, dm) * density);
         List<DetectableZone> zoneList = new ArrayList<>();
 
         if(numPoints == 2) {
@@ -99,10 +101,5 @@ public class LineSegment {
         }
 
         return zoneList;
-    }
-
-    private float dpConverter(float dpSize)
-    {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpSize, dm);
     }
 }

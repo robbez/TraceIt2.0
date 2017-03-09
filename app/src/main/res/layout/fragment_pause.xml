@@ -1,0 +1,36 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.robert.traceit.PauseFragment">
+
+
+    <Button
+        android:text="Resume"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/resume_button"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="58dp" />
+
+    <Button
+        android:text="Restart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/restart_button"
+        android:layout_marginTop="17dp"
+        android:layout_below="@+id/resume_button"
+        android:layout_alignLeft="@+id/resume_button"
+        android:layout_alignStart="@+id/resume_button" />
+
+    <Button
+        android:text="Menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/menu_button"
+        android:layout_marginTop="19dp"
+        android:layout_below="@+id/restart_button"
+        android:layout_alignLeft="@+id/restart_button"
+        android:layout_alignStart="@+id/restart_button" />
+</RelativeLayout>

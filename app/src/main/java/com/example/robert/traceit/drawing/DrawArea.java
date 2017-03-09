@@ -11,10 +11,11 @@ import android.graphics.Point;
 import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.example.robert.traceit.Interfaces.GameEventListener;
+import com.example.robert.traceit.Utils.Utils;
 import com.example.robert.traceit.shape.Shape;
 import com.example.robert.traceit.shape.ShapeGenerator;
 
@@ -28,6 +29,9 @@ public class DrawArea extends View {
 
     private static final int SHAPE_STROKE = 60;
     private static final int TRACE_STROKE = 30;
+
+    private static final int HORIZONTAL_PADDING = 50;
+    private static final int VERTICAL_PADDING = 100;
 
     private Context context;
     public int width;
@@ -46,9 +50,13 @@ public class DrawArea extends View {
     private float mX, mY;
     private static final float TOUCH_TOLERANCE = 4;
 
+    private boolean hasGameStarted;
+
     private ShapeGenerator mShapeGenerator;
 
     private ArrayList<PointF> points;
+
+    private GameEventListener gameEventListener;
 
     public DrawArea(Context c) {
         super(c);
@@ -75,6 +83,7 @@ public class DrawArea extends View {
 
         this.threshold = (SHAPE_STROKE + TRACE_STROKE);
         this.points = new ArrayList<>();
+        this.hasGameStarted = false;
     }
 
     private void setupShapePaint() {
@@ -106,38 +115,50 @@ public class DrawArea extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        this.mShapeGenerator = new ShapeGenerator(new Point(SHAPE_STROKE, SHAPE_STROKE), new Point(w - SHAPE_STROKE, h - SHAPE_STROKE), getResources().getDisplayMetrics());
-        this.mShape = this.mShapeGenerator.getNextShape();
+
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+        int horizontalPadding = (int)Utils.dpConverter(HORIZONTAL_PADDING, dm);
+        int verticalPadding = (int)Utils.dpConverter(VERTICAL_PADDING, dm);
+
+        this.mShapeGenerator = new ShapeGenerator(new Point(horizontalPadding, verticalPadding), new Point(w - horizontalPadding, h - verticalPadding), dm);
         this.mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         this.mCanvas = new Canvas(mBitmap);
+
+        if(gameEventListener != null) {
+            gameEventListener.OnGameReady();
+        }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawBitmap(mBitmap, 0, 0, this.mCanvasPaint);
-        canvas.drawPath(this.mShape.getPath(), this.mShapePaint);
-        canvas.drawPath(this.mPath, this.mDrawPaint);
+        if(this.hasGameStarted) {
+            canvas.drawPath(this.mShape.getPath(), this.mShapePaint);
+            canvas.drawPath(this.mPath, this.mDrawPaint);
+        }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        float x = event.getX();
-        float y = event.getY();
+        if(hasGameStarted) {
+            float x = event.getX();
+            float y = event.getY();
 
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                touchStarted(x, y);
-                invalidate();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                touchMoved(x, y);
-                invalidate();
-                break;
-            case MotionEvent.ACTION_UP:
-                touchEnded();
-                invalidate();
-                break;
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    touchStarted(x, y);
+                    invalidate();
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    touchMoved(x, y);
+                    invalidate();
+                    break;
+                case MotionEvent.ACTION_UP:
+                    touchEnded();
+                    invalidate();
+                    break;
+            }
         }
 
         return true;
@@ -148,8 +169,15 @@ public class DrawArea extends View {
         this.mPath.reset();
         this.mCanvas.drawPath(this.mPath, this.mDrawPaint);
 
-        if(this.mShape.getMatchRating() > 0.6 && this.mShape.passedAllCheckpoints()) {
+        double rating = this.mShape.getMatchRating();
+
+        if(rating > 0.6 && this.mShape.passedAllCheckpoints()) {
             this.mShape = this.mShapeGenerator.getNextShape();
+            if(this.gameEventListener != null) {
+                int addedTime = (int) Math.round(2.5 * rating);
+                int addedScore = (int) Math.round(100.0 * rating);
+                this.gameEventListener.OnShapeCompleted(addedTime, addedScore);
+            }
         } else {
             this.mShape.resetDetection();
         }
@@ -184,5 +212,18 @@ public class DrawArea extends View {
     public float getTraceLength(){
         this.mTracePathMeasure.setPath(this.mPath, false);
         return this.mTracePathMeasure.getLength();
+    }
+
+    public void setGameReadyListener(GameEventListener grl) {
+        this.gameEventListener = grl;
+    }
+
+    public void startGame() {
+        this.mShape = this.mShapeGenerator.getNextShape();
+        this.hasGameStarted = true;
+    }
+
+    public void endGame() {
+        this.hasGameStarted = false;
     }
 }
